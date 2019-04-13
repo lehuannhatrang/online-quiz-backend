@@ -2,20 +2,20 @@ version: '3.7'
 services:
   app:
     build: .
-    container_name: "app-server"
+    container_name: "online-quiz-server"
     ports:
     - "5001:5001"
     volumes:
     - .:/usr/app
     environment:
-    - NODE_ENV=production
+    - NODE_ENV=dev-docker
     links:
     - mongodb
     depends_on:
     - mongodb
   mongodb:
     image: mongo:latest
-    container_name: "mongodb"
+    container_name: "mongodb-online-quiz"
     environment:
     - MONGO_DATA_DIR=/data/db
     - MONGO_LOG_DIR=/dev/null

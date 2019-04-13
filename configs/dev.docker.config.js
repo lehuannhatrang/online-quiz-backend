@@ -10,8 +10,6 @@ export const DevDockerConfig = {
     },
     URL_BACKEND: "http://onlinequiz.com:5001",
     URL_FRONTEND: "http://onlinequiz.com",
-    CAS_URL: "https://login.vng.com.vn/sso",
-    CAS_VERSION: "CAS3.0",
     BASE_NAME: '/',
     CLIENT_PATH: path.resolve(__dirname, 'dist'),
     ACCESS_CONTROL_ORIGIN: '*'

@@ -1,5 +1,4 @@
 import {IndexConfig} from '../../configs';
-import bcrypt from "bcrypt";
 import {ObUtil} from '../utils';
 import {UserModel, UserInfoModel} from '../models';
 

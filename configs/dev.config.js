@@ -10,8 +10,6 @@ export const DevConfig = {
     },
     URL_BACKEND: "http://localhost:5001",
     URL_FRONTEND: "http://localhost:5000",
-    CAS_URL: "https://login.vng.com.vn/sso",
-    CAS_VERSION: "CAS3.0",
     BASE_NAME: '/',
     CLIENT_PATH: path.resolve(__dirname, 'dist'),
     ACCESS_CONTROL_ORIGIN: '*'
