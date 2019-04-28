@@ -33,7 +33,7 @@ userInfoSchema.statics.updateUserInfo= async function(userid, model, user){
 
         const differ = await diff(JSON.parse(JSON.stringify(oldValueToDiff)), JSON.parse(JSON.stringify(newValueToDiff)));
         await console.log(differ);
-        if (await differ) {
+        if (differ) {
             const action = await {
                 type: 'UPDATE',
                 user,
