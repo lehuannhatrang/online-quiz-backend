@@ -9,7 +9,6 @@ const AppRoute = express.Router();
 
 AppRoute.use((req, res, next) => {
     if (req.user && req.user.sub){
-        console.log(req.originalUrl);
         UserModel.getById(req.user.sub)
             .then(user => {
                 if (user.status !== 'ACTIVATED') {
@@ -28,5 +27,4 @@ AppRoute.use((req, res, next) => {
 // gte route
 AppRoute.use('/user', UserRouter);
 AppRoute.use('/action', UserActionRouter);
-
 export default AppRoute;
