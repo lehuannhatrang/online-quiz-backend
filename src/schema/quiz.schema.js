@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 
-export const QuizzSchema = {
+export const QuizSchema = {
     name: {
         type: String,
         require: true,
