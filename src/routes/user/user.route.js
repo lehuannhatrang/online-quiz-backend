@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserModel, UserInfoModel,QuestionModel,QuizModel } from '../../models';
+import { UserModel, UserInfoModel } from '../../models';
 import HttpUtil from "../../utils/http.util";
 import {Error} from "../../errors/Error";
 import mongoose from "mongoose";
