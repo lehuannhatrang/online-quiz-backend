@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserModel, UserInfoModel } from '../../models';
+import { UserModel, UserInfoModel,QuestionModel,QuizModel } from '../../models';
 import HttpUtil from "../../utils/http.util";
 import {Error} from "../../errors/Error";
 import mongoose from "mongoose";
@@ -73,4 +73,20 @@ UserRouter.post('/info',async (req,res)=>{
     UserInfoModel.createModel(createUserInfo, req.user.sub)
     
 })
+//get all questions in quiz
+UserRouter.get('/quiz',(req,res)=>{
+    //req: quizid
+    QuestionModel.getQuestionsByQuiz(req.body.id).then(result=>{
+        console.log(result)
+        HttpUtil.makeJsonResponse(res,result.questions)
+    })
+})
+//get a question in quiz
+UserRouter.get('/quizindex',(req,res)=>{
+    //req: quizid
+    QuestionModel.getQuestionsByQuiz(req.body.id).then(result=>{
+        HttpUtil.makeJsonResponse(res,result.questions[req.body.index])
+    })
+})
+
 export default UserRouter;
