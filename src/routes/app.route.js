@@ -1,5 +1,6 @@
 import express from 'express';
 import UserRouter from "./user/user.route";
+import QuizzRouter from "./quizz/quizz.route";
 import UserActionRouter from "./activity";
 import {UserModel} from '../models'
 import HttpUtil from "../utils/http.util";
@@ -27,5 +28,5 @@ AppRoute.use((req, res, next) => {
 // gte route
 AppRoute.use('/user', UserRouter);
 AppRoute.use('/action', UserActionRouter);
-
+AppRoute.use('/quizz', QuizzRouter);
 export default AppRoute;
