@@ -43,5 +43,30 @@ QuizRouter.post('/', (req, res)=>{
     })
 })
 
+QuizRouter.put('/', (req, res)=>{
+    const quizModifyModel = req.body;
+    if (quizModifyModel.user !== req.user.sub){
+        return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+    }
+    QuizModel.findByIdAndUpdate(quizModifyModel._id, quizModifyModel, function (err, doc){
+        if (err){
+            return next(err);
+        }
+        res.json(201, doc);
+    })
+})
+
+QuizRouter.delete('/', (req, res)=>{
+    const quizDeleteModel = req.body;
+    if (quizDeleteModel.user !== req.user.sub){
+        return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+    }
+    QuizModel.findByIdAndRemove(quizDeleteModel._id, function (err, doc){
+        if (err){
+            return next(err);
+        }
+        HttpUtil.makeHttpResponse(res, doc);
+    })
+})
 
 export default QuizRouter;
