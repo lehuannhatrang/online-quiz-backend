@@ -74,19 +74,5 @@ UserRouter.post('/info',async (req,res)=>{
     
 })
 //get all questions in quiz
-UserRouter.get('/quiz',(req,res)=>{
-    //req: quizid
-    QuestionModel.getQuestionsByQuiz(req.body.id).then(result=>{
-        console.log(result)
-        HttpUtil.makeJsonResponse(res,result.questions)
-    })
-})
-//get a question in quiz
-UserRouter.get('/quizindex',(req,res)=>{
-    //req: quizid
-    QuestionModel.getQuestionsByQuiz(req.body.id).then(result=>{
-        HttpUtil.makeJsonResponse(res,result.questions[req.body.index])
-    })
-})
 
 export default UserRouter;
