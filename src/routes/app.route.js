@@ -28,8 +28,5 @@ AppRoute.use((req, res, next) => {
 // gte route
 AppRoute.use('/user', UserRouter);
 AppRoute.use('/action', UserActionRouter);
-<<<<<<< HEAD
 AppRoute.use('/quizz', QuizzRouter);
-=======
->>>>>>> master
 export default AppRoute;
