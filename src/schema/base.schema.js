@@ -46,7 +46,21 @@ function createSchema(schemaObject, versionKey, collection) {
         result = await result.exec();
         return result ? result.toObject() : null;
     }
-
+    schema.statics.getById = async function (id, populate,select) {
+        let result = this.findOne({_id: id});
+        if (populate) {
+            if (Array.isArray(populate)) {
+                populate.forEach(i => result.populate(i))
+            } else {
+                result.populate(populate);
+            }
+        }
+        if (select) {
+            result.select(select);
+        }
+        result = await result.exec();
+        return result ? result.toObject() : null;
+    }
     schema.statics.createModel = async function(model, user) {
         model.createdBy = user;
         let result = await this.create(model);
