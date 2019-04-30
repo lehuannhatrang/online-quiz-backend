@@ -44,9 +44,7 @@ app.use(function (req, res, next) {
 app.use(cors({ credentials: true, origin: true, optionsSuccessStatus: 200 }));
 app.use('/api/', IndexRoute);
 // app.use('/users', usersRouter);
-app.use("/kuto/:user",(req,res,next)=>{
-    res.send(req.originalUrl+"kuto")
-})
+
 //connect database
 var url = IndexConfig.AUTH_DB.url;
 const mongodbOptions = IndexConfig.AUTH_DB.options;
