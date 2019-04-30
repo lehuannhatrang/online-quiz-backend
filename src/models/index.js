@@ -4,11 +4,13 @@ import UserActionModel from './user.action.model';
 import QuestionModel from './quiz.question.model';
 import QuizModel from './quiz.model';
 import ResultModel from './result.model';
+import RoomModel from './room.model';
 export {
     UserModel,
     UserInfoModel,
     UserActionModel,
     QuestionModel,
     QuizModel,
-    ResultModel
+    ResultModel,
+    RoomModel
 };

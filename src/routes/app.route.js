@@ -3,10 +3,11 @@ import UserRouter from "./user/user.route";
 import QuizRouter from "./quiz/quiz.route";
 import ResultRouter from "./result/result.route";
 import UserActionRouter from "./activity";
-import {UserModel} from '../models'
+import {UserModel, RoomModel} from '../models'
 import HttpUtil from "../utils/http.util";
 import {Error} from "../errors/Error";
 import QuestionRouter from "./question/question.route"
+import RoomRouter from "./room/room.route"
 const AppRoute = express.Router();
 
 AppRoute.use((req, res, next) => {
@@ -33,5 +34,6 @@ AppRoute.use('/quiz', QuizRouter);
 AppRoute.use('/result', ResultRouter);
 
 AppRoute.use('/question',QuestionRouter);
+AppRoute.use('/room',RoomRouter)
 
 export default AppRoute;
