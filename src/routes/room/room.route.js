@@ -41,18 +41,14 @@ RoomRouter.put('/', (req, res) => {
                 return HttpUtil.makeErrorResponse(res, Error.WRONG_USER)
             }
             RoomModel.updateModel(req.body.id,req.body,req.user.sub)
+            .then(result => HttpUtil.makeJsonResponse(res, result));
 
         })
 
 })
 RoomRouter.post('/',async (req,res)=>{
-    RoomModel.getById(req.body.id)
-        .then(result => {
-            if(!result){
-                HttpUtil.makeErrorResponse(res,Error.ITEM_EXISTED)
-            }
-            RoomModel.createModel(req.body,req.user.sub)
-        })
+    RoomModel.createModel(req.body,req.user.sub)
+        .then(result => HttpUtil.makeJsonResponse(res, result));
 })
 
 export default RoomRouter;
