@@ -5,7 +5,7 @@ import UserActionRouter from "./activity";
 import {UserModel} from '../models'
 import HttpUtil from "../utils/http.util";
 import {Error} from "../errors/Error";
-
+import QuestionRouter from "./question/question.route"
 const AppRoute = express.Router();
 
 AppRoute.use((req, res, next) => {
@@ -29,4 +29,7 @@ AppRoute.use((req, res, next) => {
 AppRoute.use('/user', UserRouter);
 AppRoute.use('/action', UserActionRouter);
 AppRoute.use('/quiz', QuizRouter);
+
+AppRoute.use('/question',QuestionRouter);
+
 export default AppRoute;
