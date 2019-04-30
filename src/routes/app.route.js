@@ -7,6 +7,7 @@ import HttpUtil from "../utils/http.util";
 import {Error} from "../errors/Error";
 import QuestionRouter from "./question/question.route"
 import RoomRouter from "./room/room.route"
+import ReportRouter from "./report/report.route"
 const AppRoute = express.Router();
 
 AppRoute.use((req, res, next) => {
@@ -32,6 +33,6 @@ AppRoute.use('/action', UserActionRouter);
 AppRoute.use('/quiz', QuizRouter);
 
 AppRoute.use('/question',QuestionRouter);
-AppRoute.use('/room',RoomRouter)
-
+AppRoute.use('/room',RoomRouter);
+AppRoute.use('/report',ReportRouter);
 export default AppRoute;
