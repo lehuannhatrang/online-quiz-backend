@@ -8,7 +8,8 @@ export const Error = {
     SESSION_EXPIRED: 'SESSION_EXPIRED',
     BAD_REQUEST: 'BAD_REQUEST',
     DUPLICATED_USER_INFO:'DUPLICATED_USER_INFO',
-    NOT_FOUND_INFO:'NOT_FOUND_INFO'
+    NOT_FOUND_INFO:'NOT_FOUND_INFO',
+    ITEM_EXISTED: 'ITEM_EXISTED',
 }
 
 const ErrorMessage = {
@@ -55,6 +56,10 @@ const ErrorMessage = {
     NOT_FOUND_INFO:{
         status:400,
         message:'infomation can not be found'
+    },
+    ITEM_EXISTED:{
+        status:400,
+        message:'item is existed'
     }
 }
 

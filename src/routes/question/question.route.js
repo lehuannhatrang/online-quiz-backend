@@ -6,7 +6,13 @@ import mongoose from "mongoose";
 
 const QuestionRouter = express.Router();
 
-
+QuestionRouter.get('/list', (req, res) => {
+    QuestionModel.list()
+        .then(result => {
+            HttpUtil.makeJsonResponse(res, result)
+        })
+    
+})
 QuestionRouter.get('/', (req, res) => {
     QuestionModel.getById(req.body.id)
         .then(result => {
