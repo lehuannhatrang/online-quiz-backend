@@ -1,5 +1,5 @@
 import express from 'express';
-import {ResultModel} from '../../models';
+import {ResultModel,RoomModel, QuizModel, QuestionModel} from '../../models';
 import HttpUtil from "../../utils/http.util";
 import {Error} from "..//../errors/Error";
 import { runInNewContext } from 'vm';
@@ -33,7 +33,17 @@ ResultRouter.post('/', (req, res)=>{
     var quizAnswer = [];
     if (userResult.room != null){
         // get quiz's answers from room
+        var quizQuestion= QuizModel
+        .getById(
+            RoomModel.getById(
+                userResult.room
+                , null, null).QuizId
+                , null, null).question;
+        quizQuestion.array.forEach(element => {
+            quizAnswer.push(element.answer)
+        });
     }
+    console.log(quizAnswer);
     //Score the mark
     userResult.score = markScore(userAnswers, quizAnswer);
     
