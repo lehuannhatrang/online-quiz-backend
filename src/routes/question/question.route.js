@@ -29,13 +29,13 @@ QuestionRouter.get('/', (req, res) => {
 })
 
 QuestionRouter.post('/', (req, res) => {
-    UserModel.createModel(req.body, req.user.sub)
-        .then(user => HttpUtil.makeJsonResponse(res, user));
+    QuestionModel.createModel(req.body, req.user.sub)
+        .then(result => HttpUtil.makeJsonResponse(res, result));
 })
 
 QuestionRouter.put('/', (req, res) => {
-    UserModel.updateModel(req.body.id, req.body, req.user.sub)
-        .then(user => HttpUtil.makeJsonResponse(res, user));
+    QuestionModel.updateModel(req.body.id, req.body, req.user.sub)
+        .then(result => HttpUtil.makeJsonResponse(res, result));
 })
 
 export default QuestionRouter;

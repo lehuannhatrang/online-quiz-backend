@@ -5,6 +5,7 @@ import QuestionModel from './quiz.question.model';
 import QuizModel from './quiz.model';
 import ResultModel from './result.model';
 import RoomModel from './room.model';
+import ReportModel from './report.model';
 export {
     UserModel,
     UserInfoModel,
