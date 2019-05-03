@@ -13,5 +13,6 @@ export {
     QuestionModel,
     QuizModel,
     ResultModel,
-    RoomModel
+    RoomModel,
+    ReportModel
 };

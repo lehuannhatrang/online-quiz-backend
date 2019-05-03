@@ -19,35 +19,53 @@ var markScore = function(userAnswers, quizAnswer){
         }
     }
 
-    return 10 * (numQuestion - numIncorrect) / numQuestion;
+    return Math.floor(10 * (numQuestion - numIncorrect) / numQuestion);
 }
-ResultRouter.post('/', (req, res)=>{
+ResultRouter.post('/', async (req, res)=>{
     //Check whether this result is exactly user's result
+    var userResult = req.body;
+    
     if (userResult.user !== req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
-    var userResult = req.body;
     // get user's answers
     const userAnswers = userResult.userAnswer;
     // get quiz's answers
     var quizAnswer = [];
+
     if (userResult.room != null){
         // get quiz's answers from room
-        var quizQuestion= QuizModel
-        .getById(
-            RoomModel.getById(
-                userResult.room
-                , null, null).QuizId
-                , null, null).question;
-        quizQuestion.array.forEach(element => {
-            quizAnswer.push(element.answer)
+        var quizId, questionIdList, answer;
+        await RoomModel.findOne({_id:userResult.room},(err, res)=>{
+            quizId = res.QuizId;
         });
+        await QuizModel.findOne({_id:quizId}, (err, res)=>{
+            questionIdList = res.question;
+        })
+        
+        //console.log(questionIdList);
+        // await questionIdList.forEach(async element => {
+        //     await QuestionModel.findOne({_id:element}, (err, res)=>{
+        //         answer = res.answer;
+        //         quizAnswer.push(answer);
+        //     }) 
+        //     //console.log(quizAnswer);
+        // }); 
+        var j;
+        for (j = 0; j < questionIdList.length; j++){
+            await QuestionModel.findOne({_id:questionIdList[j]}, (err, res)=>{
+                quizAnswer.push(res.answer);
+            }); 
+        }
+        
     }
-    console.log(quizAnswer);
-    //Score the mark
-    userResult.score = markScore(userAnswers, quizAnswer);
     
-    userResult.quizAnswer = quizAnswer;
+    //Score the mark
+    let score = markScore(userAnswers, quizAnswer);
+    console.log(score);
+    userResult.score = score;
+    
+    //userResult.quizAnswer = quizAnswer;
     //save to database
     var newResult = new ResultModel(userResult);
     newResult.save(function (err, post){
