@@ -43,14 +43,7 @@ ResultRouter.post('/', async (req, res)=>{
             questionIdList = res.question;
         })
         
-        //console.log(questionIdList);
-        // await questionIdList.forEach(async element => {
-        //     await QuestionModel.findOne({_id:element}, (err, res)=>{
-        //         answer = res.answer;
-        //         quizAnswer.push(answer);
-        //     }) 
-        //     //console.log(quizAnswer);
-        // }); 
+       
         var j;
         for (j = 0; j < questionIdList.length; j++){
             await QuestionModel.findOne({_id:questionIdList[j]}, (err, res)=>{
@@ -77,5 +70,31 @@ ResultRouter.post('/', async (req, res)=>{
         res.json(201, post);
     })
     
+})
+// get result of this room, need roomID & userID
+ResultRouter.get('/', (req, res)=>{
+    console.log(req.headers.roomid);
+    console.log(req.user.sub);
+    ResultModel.findOne({
+        'user':req.user.sub,
+        'room':req.headers.roomid
+    })
+    .then(result => {
+        HttpUtil.makeJsonResponse(res, result);
+    })
+    .catch(err => {
+        HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+    })
+})
+
+//get all results of user
+ResultRouter.get('/my', (req, res)=>{
+    ResultModel.find({user:req.user.sub})
+    .then(results=>{
+        HttpUtil.makeJsonResponse(res, results);
+    })
+    .catch(err => {
+        HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+    })
 })
 export default ResultRouter;
