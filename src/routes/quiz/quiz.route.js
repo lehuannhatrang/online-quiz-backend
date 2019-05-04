@@ -55,13 +55,19 @@ QuizRouter.put('/', (req, res)=>{
         res.json(201, doc);
     })
 })
-
-QuizRouter.delete('/', (req, res)=>{
+// delete need 
+QuizRouter.delete('/',async (req, res)=>{
     const quizDeleteModel = req.body;
-    if (quizDeleteModel.user !== req.user.sub){
+    var owner;
+    await QuizModel.findOne({_id:quizDeleteModel.id}, (err, res)=>{
+        owner = res.user;
+    })
+    console.log(owner);
+    console.log(req.user.sub);
+    if (owner != req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
-    QuizModel.findByIdAndRemove(quizDeleteModel._id, function (err, doc){
+    QuizModel.findByIdAndRemove(quizDeleteModel.id, function (err, doc){
         if (err){
             return next(err);
         }
