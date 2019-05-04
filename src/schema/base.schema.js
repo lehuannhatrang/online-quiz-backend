@@ -74,7 +74,19 @@ function createSchema(schemaObject, versionKey, collection) {
         UserActionModel.create(action);
         return result ? result.toObject() : null;
     }
-
+    schema.statics.createModel1 = async function(model, user) {
+        model.createdBy = user;
+        let result = await this.create(model);
+        const action = {
+            type: 'CREATE',
+            user,
+            collectionName: this.collection.name,
+            oldValue: null,
+            newValue: JSON.stringify(result)
+        }
+        UserActionModel.create(action);
+        return result ? result : null;
+    }
     schema.statics.deleteModel = async function(id, updatedAt, user) {
         const oldVersion = await this.findOne({_id: id}).exec();
         if (oldVersion) {
