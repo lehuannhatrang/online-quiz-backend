@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import createSchema from "../schema/base.schema";
 import { QuestionSchema } from "../schema/quiz.question.schema";
-import { UserActionModel,QuizModel } from "../models";
+import { UserActionModel,QuizModel,QuestionModel } from "../models";
 import diff from 'deep-diff';
 const questionSchema = createSchema(QuestionSchema, false, 'question');
 //function static
@@ -44,15 +44,15 @@ questionSchema.statics.setQuestionsByIndex = async function(quiz,index, model, u
     }
     return result ? result.toObject() : null;
 }
-questionSchema.statics.createListQuestions=function (questions,user){
+questionSchema.statics.createListQuestions=  function (questions,user){
     let listid=[];
-    for (ques in question){
-        await this.createModel(ques,user).then(
-            result=>{
-                listid.push(result._id)
-            }
-        )
-    }
+    questions.forEach(function(element) {
+        // console.log(element)
+        QuestionModel.createModel(element,user).then(result=>{
+                listid.push(result._id);
+                console.log(result)
+            })
+    })
     return listid;
 }
 export default mongoose.model('Question', questionSchema);

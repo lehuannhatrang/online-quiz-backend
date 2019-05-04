@@ -1,11 +1,14 @@
 import express from 'express';
-import { ReportModel } from '../../models';
+import { ReportModel,QuestionModel } from '../../models';
 import HttpUtil from "../../utils/http.util";
 import {Error} from "../../errors/Error";
 import mongoose from "mongoose";
 
 const ReportRouter = express.Router();
-
+ReportRouter.post('/questions', (req, res) => {
+    let a =QuestionModel.createListQuestions(req.body.questions)
+    console.log(a)
+})
 ReportRouter.get('/list', (req, res) => {
     ReportModel.list(['results'])
         .then(result => {
