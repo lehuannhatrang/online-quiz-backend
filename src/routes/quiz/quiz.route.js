@@ -31,6 +31,21 @@ QuizRouter.get('/public', (req, res)=>{
         })
 })
 
+//get quiz by id, 
+//req: header must have id field
+QuizRouter.get('/id', (req, res)=>{
+    const quizIdRequest = req.headers.id;
+    QuizModel.findOne({_id:quizIdRequest}, (err, doc)=>{
+        if (err){
+            return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+        }
+        if (req.user.sub != doc.user){
+            return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+        }
+        return HttpUtil.makeJsonResponse(res, doc);
+    })
+})
+
 QuizRouter.post('/', (req, res)=>{
     let createPost = req.body;
     createPost.user = req.user.sub;
