@@ -10,6 +10,8 @@ export const Error = {
     DUPLICATED_USER_INFO:'DUPLICATED_USER_INFO',
     NOT_FOUND_INFO:'NOT_FOUND_INFO',
     DUPLICATE_USERNAME: 'DUPLICATE_USERNAME',
+    NOT_FOUND_INFO:'NOT_FOUND_INFO',
+    ITEM_EXISTED: 'ITEM_EXISTED',
 }
 
 const ErrorMessage = {
@@ -60,6 +62,10 @@ const ErrorMessage = {
     DUPLICATE_USERNAME:{
         status:400,
         message:'duplicate username'
+    },
+    ITEM_EXISTED:{
+        status:400,
+        message:'item is existed'
     }
 }
 
