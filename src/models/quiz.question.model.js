@@ -44,15 +44,9 @@ questionSchema.statics.setQuestionsByIndex = async function(quiz,index, model, u
     }
     return result ? result.toObject() : null;
 }
-questionSchema.statics.createListQuestions=  function (questions,user){
-    let listid=[];
-    questions.forEach(function(element) {
-        // console.log(element)
-        QuestionModel.createModel(element,user).then(result=>{
-                listid.push(result._id);
-                console.log(result)
-            })
+questionSchema.statics.createListQuestions= async function (questions,user){
+    return QuestionModel.createModel1(questions,user).then(result=>{
+        return result.map(json=>json._id)
     })
-    return listid;
 }
 export default mongoose.model('Question', questionSchema);

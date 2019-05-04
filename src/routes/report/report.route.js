@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 
 const ReportRouter = express.Router();
 ReportRouter.post('/questions', (req, res) => {
-    let a =QuestionModel.createListQuestions(req.body.questions)
-    console.log(a)
+    QuestionModel.createListQuestions(req.body.questions).then(result=>{
+        console.log(result)
+    })
 })
 ReportRouter.get('/list', (req, res) => {
     ReportModel.list(['results'])
