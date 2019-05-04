@@ -71,10 +71,9 @@ ResultRouter.post('/', async (req, res)=>{
     })
     
 })
-// get result of this room, need roomID & userID
+// get result of this room, need roomID at HEADER
 ResultRouter.get('/', (req, res)=>{
-    console.log(req.headers.roomid);
-    console.log(req.user.sub);
+    
     ResultModel.findOne({
         'user':req.user.sub,
         'room':req.headers.roomid
