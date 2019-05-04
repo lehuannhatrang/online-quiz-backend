@@ -17,10 +17,5 @@ export const RoomSchema = {
         type:Schema.ObjectId,
         ref:"User",
         require:true 
-    },
-    Report: {
-        type: Schema.ObjectId,
-        ref:"Report",
-        require: true
     }
 }

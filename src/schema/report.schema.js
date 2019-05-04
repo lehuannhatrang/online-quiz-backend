@@ -13,5 +13,9 @@ export const ReportSchema = {
     results: [{
         type: Schema.ObjectId,
         ref: 'Result'
-    }]
+    }],
+    roomID:{
+        type: Schema.ObjectId,
+        ref: 'Room'
+    }
 }

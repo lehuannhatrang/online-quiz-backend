@@ -27,6 +27,18 @@ ReportRouter.get('/summary', (req, res) => {
         })
  
 })
+ReportRouter.get('/room', (req, res) => {
+    ReportModel.getById(req.body.id,["roomID"],'roomID')
+        .then(result => {
+            HttpUtil.makeJsonResponse(res, result)
+        })
+})
+ReportRouter.get('/', (req, res) => {
+    ReportModel.getById(req.body.id,null)
+        .then(result => {
+            HttpUtil.makeJsonResponse(res, result)
+        })
+})
 ReportRouter.put('/', (req, res) => {  
     ReportModel.getById(req.body.id,'Owner','Owner')
         .then(result => {

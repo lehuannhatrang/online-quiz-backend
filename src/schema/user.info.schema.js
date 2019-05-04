@@ -17,4 +17,5 @@ export const UserInfoSchema = {
         type: Schema.ObjectId,
         ref: 'User'
     }
+    
 }

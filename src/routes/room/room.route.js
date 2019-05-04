@@ -20,6 +20,13 @@ RoomRouter.get('/owner', (req, res) => {
         })
        
 })
+RoomRouter.get('/', (req, res) => {
+    RoomModel.getById(req.body.id,null)
+        .then(result => {
+            HttpUtil.makeJsonResponse(res, result)
+        })
+       
+})
 RoomRouter.get('/quiz', (req, res) => {
     RoomModel.getById(req.body.id,'quizId','quizId')
         .then(result => {
@@ -27,13 +34,13 @@ RoomRouter.get('/quiz', (req, res) => {
         })
  
 })
-RoomRouter.get('/report', (req, res) => {
-    RoomModel.getById(req.body.id,'quizId','quizId')
-        .then(result => {
-            HttpUtil.makeJsonResponse(res, result)
-        })
+// RoomRouter.get('/report', (req, res) => {
+//     RoomModel.getById(req.body.id,'quizId','quizId')
+//         .then(result => {
+//             HttpUtil.makeJsonResponse(res, result)
+//         })
  
-})
+// })
 RoomRouter.put('/', (req, res) => {
     RoomModel.getById(req.body.id,'Owner','Owner')
         .then(result => {
