@@ -6,4 +6,4 @@ const quizSchema = createSchema(QuizSchema, false, 'quizzes');
 
 
 
-export default mongoose.model('Quiz', QuizSchema);
+export default mongoose.model('Quiz', quizSchema);
