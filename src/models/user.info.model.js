@@ -44,5 +44,12 @@ userInfoSchema.statics.updateUserInfo= async function(userid, model, user){
         }
         return result ? result.toObject() : null;
 }
+
+userInfoSchema.statics.getUserInfoByMail = async function (mail) {
+    let info = await this.findOne({ mail }).exec();
+    return info ? info.toObject() : null;
+}
+
+
 export default mongoose.model('UserInfo', userInfoSchema);
 
