@@ -42,20 +42,24 @@ RoomRouter.get('/quiz', (req, res) => {
  
 // })
 RoomRouter.put('/', (req, res) => {
+    req.body.startTime = new Date(req.body.startTime)
     RoomModel.getById(req.body.id,'Owner','Owner')
         .then(result => {
             if(result.id!=req.user.sub){
                 return HttpUtil.makeErrorResponse(res, Error.WRONG_USER)
             }
             RoomModel.updateModel(req.body.id,req.body,req.user.sub)
-            .then(result => HttpUtil.makeJsonResponse(res, result));
-
+            .then(result => HttpUtil.makeJsonResponse(res, result))
+            .catch(err=>HttpUtil.makeErrorResponse(res,err))
         })
 
 })
-RoomRouter.post('/',async (req,res)=>{
+RoomRouter.post('/', (req,res)=>{
+    req.body.startTime = new Date(req.body.startTime)
+    req.body.Owner=req.user.sub
     RoomModel.createModel(req.body,req.user.sub)
-        .then(result => HttpUtil.makeJsonResponse(res, result));
+        .then(result => HttpUtil.makeJsonResponse(res, result))
+        .catch(err=>HttpUtil.makeErrorResponse(res,err))
 })
 
 export default RoomRouter;
