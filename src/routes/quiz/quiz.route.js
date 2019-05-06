@@ -31,6 +31,21 @@ QuizRouter.get('/public', (req, res)=>{
         })
 })
 
+//get quiz by id, 
+//req: header must have id field
+QuizRouter.get('/id', (req, res)=>{
+    const quizIdRequest = req.headers.id;
+    QuizModel.findOne({_id:quizIdRequest}, (err, doc)=>{
+        if (err){
+            return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+        }
+        if (req.user.sub != doc.user){
+            return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+        }
+        return HttpUtil.makeJsonResponse(res, doc);
+    })
+})
+
 QuizRouter.post('/', (req, res)=>{
     let createPost = req.body;
     createPost.user = req.user.sub;
@@ -55,13 +70,19 @@ QuizRouter.put('/', (req, res)=>{
         res.json(201, doc);
     })
 })
-
-QuizRouter.delete('/', (req, res)=>{
+// delete need 
+QuizRouter.delete('/',async (req, res)=>{
     const quizDeleteModel = req.body;
-    if (quizDeleteModel.user !== req.user.sub){
+    var owner;
+    await QuizModel.findOne({_id:quizDeleteModel.id}, (err, res)=>{
+        owner = res.user;
+    })
+    console.log(owner);
+    console.log(req.user.sub);
+    if (owner != req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
-    QuizModel.findByIdAndRemove(quizDeleteModel._id, function (err, doc){
+    QuizModel.findByIdAndRemove(quizDeleteModel.id, function (err, doc){
         if (err){
             return next(err);
         }
