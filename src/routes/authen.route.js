@@ -70,7 +70,7 @@ AuthenRoute.use('/login', (req, res, next) => {
                 return next(err);
             });
         });
-        console('next', next)
+        console.log('next', next)
     })(req, res, next);
 });
 
