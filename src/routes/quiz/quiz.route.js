@@ -1,5 +1,5 @@
 import express from 'express';
-import {QuizModel} from '../../models';
+import {QuizModel, QuestionModel} from '../../models';
 import HttpUtil from "../../utils/http.util";
 import {Error} from "..//../errors/Error";
 import mongoose from "mongoose";
@@ -46,9 +46,18 @@ QuizRouter.get('/id', (req, res)=>{
     })
 })
 
-QuizRouter.post('/', (req, res)=>{
-    let createPost = req.body;
-    createPost.user = req.user.sub;
+QuizRouter.post('/', async (req, res)=>{
+    var questions;
+    await QuestionModel.createListQuestions(req.body.questions).then(result=>{
+        questions = result
+    })
+    var createPost = {
+        name: req.body.name,
+        isPublic: req.body.isPublic,
+        user: req.user.sub,
+        question: questions
+    }
+    //createPost = req.user.sub;
     var newQuiz = new QuizModel(createPost);
     newQuiz.save(function (err, post){
         if (err){ 
