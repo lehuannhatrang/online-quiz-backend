@@ -49,4 +49,14 @@ questionSchema.statics.createListQuestions= async function (questions,user){
         return result.map(json=>json._id)
     })
 }
+questionSchema.statics.deleteListQuestions= function (questions,user){
+    let result=questions.map(x=>{
+        let obj = new Object();
+        obj.question_id=x
+        obj.status=QuestionModel.deleteModel1(x,user)
+        // let jsonString= JSON.stringify(obj);
+        return obj
+        })
+     return result
+}
 export default mongoose.model('Question', questionSchema);
