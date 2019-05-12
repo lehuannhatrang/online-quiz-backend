@@ -29,7 +29,7 @@ SignUpRoute.post('/', (req, res) => {
                                 mail: req.body.email,
                                 role: req.body.role,
                                 displayName: req.body.displayName,
-                                user: new mongoose.mongo.ObjectId(user.id)
+                                user: user,
                             };
                             UserInfoModel.createModel(createUserInfo, user)
                                 .then(result => HttpUtil.makeJsonResponse(res, user))
