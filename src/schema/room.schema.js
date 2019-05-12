@@ -1,5 +1,9 @@
 import Schema from "mongoose";
 export const RoomSchema = {
+    name: {
+        type: String,
+    },
+    
     QuizId: {
         type: Schema.ObjectId,
         require:true,
