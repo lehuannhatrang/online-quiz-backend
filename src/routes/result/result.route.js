@@ -25,9 +25,10 @@ ResultRouter.post('/', async (req, res)=>{
     //Check whether this result is exactly user's result
     var userResult = req.body;
     
-    if (userResult.user !== req.user.sub){
-        return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
-    }
+    // if (userResult.user !== req.user.sub){
+    //     return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+    // }
+    userResult.user = req.user.sub;
     // get user's answers
     const userAnswers = userResult.userAnswer;
     // get quiz's answers
@@ -37,9 +38,15 @@ ResultRouter.post('/', async (req, res)=>{
         // get quiz's answers from room
         var quizId, questionIdList, answer;
         await RoomModel.findOne({_id:userResult.room},(err, res)=>{
+            if (!res || err){
+                return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+            }
             quizId = res.QuizId;
         });
         await QuizModel.findOne({_id:quizId}, (err, res)=>{
+            if (!res || err){
+                return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+            }
             questionIdList = res.question;
         })
         
@@ -60,15 +67,18 @@ ResultRouter.post('/', async (req, res)=>{
     
     //userResult.quizAnswer = quizAnswer;
     //save to database
-    var newResult = new ResultModel(userResult);
-    newResult.save(function (err, post){
-        if (err){
-            return next(err);
-        }
-        // WARNING: JUST FOR DEBUG, needed remove 
-        // this response
-        res.json(201, post);
-    })
+    ResultModel.createModel(userResult,req.user.sub)
+        .then(result => HttpUtil.makeJsonResponse(res, result))
+        .catch(err=>HttpUtil.makeErrorResponse(res,err));
+    // var newResult = new ResultModel(userResult);
+    // newResult.save(function (err, post){
+    //     if (err){
+    //         return next(err);
+    //     }
+    //     // WARNING: JUST FOR DEBUG, needed remove 
+    //     // this response
+    //     res.json(201, post);
+    // })
     
 })
 // get result of this room, need roomID at HEADER
