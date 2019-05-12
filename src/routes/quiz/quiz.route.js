@@ -67,9 +67,16 @@ QuizRouter.post('/', async (req, res)=>{
     })
 })
 
-QuizRouter.put('/', (req, res)=>{
+QuizRouter.put('/', async (req, res)=>{
+    // if (quizModifyModel.user !== req.user.sub){
+    //     return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+    // }
     const quizModifyModel = req.body;
-    if (quizModifyModel.user !== req.user.sub){
+    var owner;
+    await QuizModel.findOne({_id:quizModifyModel.id}, (err, res)=>{
+        owner = res.user;
+    })
+    if (owner != req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
     QuizModel.findByIdAndUpdate(quizModifyModel._id, quizModifyModel, function (err, doc){
