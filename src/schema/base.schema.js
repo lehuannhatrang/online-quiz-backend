@@ -103,7 +103,7 @@ function createSchema(schemaObject, versionKey, collection) {
         }
         return null;
     }
-    schema.statics.deleteModel1 = function(id, user) {
+    schema.statics.deleteModel = function(id, user) {
         const oldVersion = this.findOne({_id: id}).exec();
         // console.log(oldVersion)
         if (oldVersion) {
