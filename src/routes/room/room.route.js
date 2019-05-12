@@ -62,8 +62,8 @@ RoomRouter.post('/', (req,res)=>{
         .catch(err=>HttpUtil.makeErrorResponse(res,err))
 })
 
-RoomRouter.delete('/',async (req,res)=>{
-    let status=await QuestionModel.deleteListQuestions(req.body.question_list,req.user.sub)
-    HttpUtil.makeHttpResponse(res,status)
-})
+// RoomRouter.delete('/',async (req,res)=>{
+//     let status=await QuestionModel.deleteListQuestions(req.body.question_list,req.user.sub)
+//     HttpUtil.makeHttpResponse(res,status)
+// })
 export default RoomRouter;
