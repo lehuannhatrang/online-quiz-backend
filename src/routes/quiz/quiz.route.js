@@ -21,9 +21,35 @@ QuizRouter.get('/', (req, res)=>{
 })
 
 // Get public quiz list
-QuizRouter.get('/public', (req, res)=>{
+QuizRouter.get('/public', async (req, res)=>{
     QuizModel.find({isPublic: true})
-        .then(quizzes => {
+        .then(async quizzes => {
+            //var quizzes = quizzes;  
+            var i;
+            for (i = 0; i < quizzes.length; i++){
+                var idQuestionList = quizzes[i].question;
+                var questionList = []
+                var j;
+
+                for (j = 0; j < idQuestionList.length; j++){
+                    var question;
+                    await QuestionModel.getById(idQuestionList[j]).then((result)=>{
+                        //console.log(idQuestionList[j])
+                        // if (!result) {
+                        //     console.log("here OK");
+
+                        //     return done(null, false, { message: 'can not find question' });
+                        // }
+                        question = result;
+                    })
+                    questionList.push(question);
+                }
+                quizzes[i].set('questions', questionList,{strict: false});
+                console.log(quizzes[i]);
+
+            } 
+            //console.log(listQuestionId);
+
             HttpUtil.makeJsonResponse(res, quizzes)
         })
         .catch(err => {
