@@ -53,7 +53,7 @@ questionSchema.statics.deleteListQuestions= function (questions,user){
     let result=questions.map(x=>{
         let obj = new Object();
         obj.question_id=x
-        obj.status=QuestionModel.deleteModel1(x,user)
+        obj.status=QuestionModel.deleteModel(x,user)
         // let jsonString= JSON.stringify(obj);
         return obj
         })

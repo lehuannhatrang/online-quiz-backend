@@ -6,6 +6,7 @@ import QuizModel from './quiz.model';
 import ResultModel from './result.model';
 import RoomModel from './room.model';
 import ReportModel from './report.model';
+import SchoolModel from './school.model';
 export {
     UserModel,
     UserInfoModel,
@@ -14,5 +15,6 @@ export {
     QuizModel,
     ResultModel,
     RoomModel,
-    ReportModel
+    ReportModel,
+    SchoolModel
 };

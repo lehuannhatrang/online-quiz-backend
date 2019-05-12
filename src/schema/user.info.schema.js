@@ -17,6 +17,9 @@ export const UserInfoSchema = {
     user: {
         type: Schema.ObjectId,
         ref: 'User'
+    },
+    school:{
+        type:Schema.ObjectId,
+        ref: 'School'
     }
-    
 }
