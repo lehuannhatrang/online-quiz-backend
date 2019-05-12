@@ -105,7 +105,7 @@ QuizRouter.put('/', async (req, res)=>{
 })
 // delete need 
 QuizRouter.delete('/',async (req, res)=>{
-    const quizDeleteModel = req.body;
+    const quizDeleteModel = req.query;
     var owner;
     var quiz;
     await QuizModel.findOne({_id:quizDeleteModel.id}, (err, q)=>{
