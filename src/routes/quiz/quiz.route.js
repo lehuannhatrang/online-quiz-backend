@@ -67,12 +67,36 @@ QuizRouter.post('/', async (req, res)=>{
     })
 })
 
-QuizRouter.put('/', (req, res)=>{
+QuizRouter.put('/', async (req, res)=>{
+    // if (quizModifyModel.user !== req.user.sub){
+    //     return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+    // }
     const quizModifyModel = req.body;
-    if (quizModifyModel.user !== req.user.sub){
+    var owner;
+    var quiz;
+    await QuizModel.findOne({_id:quizModifyModel.id}, (err, q)=>{
+        owner = q.user;
+        quiz = q;
+    })
+    if (owner != req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
-    QuizModel.findByIdAndUpdate(quizModifyModel._id, quizModifyModel, function (err, doc){
+    // delete old question
+    let status = await QuestionModel.deleteListQuestions(quiz.question, req.user.sub);
+    console.log(status);
+    // recreate new question
+    var questions;
+    await QuestionModel.createListQuestions(req.body.questions).then(result=>{
+        questions = result;
+    })
+    quizModifyModel.question = questions;
+    var newModelToUpdate = {
+        name:quizModifyModel.name,
+        isPublic:quizModifyModel.isPublic,
+        user: req.user.sub,
+        question: questions
+    }
+    QuizModel.findByIdAndUpdate(quizModifyModel.id, newModelToUpdate, function (err, doc){
         if (err){
             return next(err);
         }
@@ -83,14 +107,21 @@ QuizRouter.put('/', (req, res)=>{
 QuizRouter.delete('/',async (req, res)=>{
     const quizDeleteModel = req.body;
     var owner;
-    await QuizModel.findOne({_id:quizDeleteModel.id}, (err, res)=>{
-        owner = res.user;
+    var quiz;
+    await QuizModel.findOne({_id:quizDeleteModel.id}, (err, q)=>{
+        if (q == null){
+            return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+        }
+        owner = q.user;
+        quiz = q;
     })
     console.log(owner);
     console.log(req.user.sub);
     if (owner != req.user.sub){
         return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
     }
+    let status = await QuestionModel.deleteListQuestions(quiz.question, req.user.sub);
+    console.log(status);
     QuizModel.findByIdAndRemove(quizDeleteModel.id, function (err, doc){
         if (err){
             return next(err);
