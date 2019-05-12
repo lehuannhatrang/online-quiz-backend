@@ -63,7 +63,8 @@ RoomRouter.post('/', (req,res)=>{
 })
 
 RoomRouter.delete('/',async (req,res)=>{
-    RoomModel.deleteModel(req.body.id,req.user.sub)
-    HttpUtil.makeHttpResponse(res,{id:req.body.id,status:"done"})
+    console.log(req.query.id)
+    RoomModel.deleteModel(req.query.id,req.user.sub)
+    HttpUtil.makeHttpResponse(res,{id:req.query.id,status:"done"})
 })
 export default RoomRouter;
