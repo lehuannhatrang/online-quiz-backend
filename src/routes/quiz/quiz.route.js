@@ -10,8 +10,25 @@ const QuizRouter = express.Router();
 QuizRouter.get('/', (req, res)=>{
     const userId = req.user.sub;
     
-    QuizModel.find({user: userId})
-        .then(quizzes => {
+    QuizModel.getByQuery({user: userId})
+        .then(async quizzes => {
+            var i;
+            for (i = 0; i < quizzes.length; i++){
+                var idQuestionList = quizzes[i].question;
+                var questionList = []
+                var j;
+
+                for (j = 0; j < idQuestionList.length; j++){
+                    var question;
+                    await QuestionModel.getById(idQuestionList[j]).then((result)=>{
+                        
+                        question = result;
+                    })
+                    questionList.push(question);
+                }
+                quizzes[i].set('questions', questionList,{strict: false});
+
+            } 
             HttpUtil.makeJsonResponse(res, quizzes)
         })
         .catch(err => {
@@ -21,9 +38,29 @@ QuizRouter.get('/', (req, res)=>{
 })
 
 // Get public quiz list
-QuizRouter.get('/public', (req, res)=>{
-    QuizModel.find({isPublic: true})
-        .then(quizzes => {
+QuizRouter.get('/public', async (req, res)=>{
+    QuizModel.getByQuery({isPublic: true})
+        .then(async quizzes => {
+            //var quizzes = quizzes;  
+            var i;
+            for (i = 0; i < quizzes.length; i++){
+                var idQuestionList = quizzes[i].question;
+                var questionList = []
+                var j;
+
+                for (j = 0; j < idQuestionList.length; j++){
+                    var question;
+                    await QuestionModel.getById(idQuestionList[j]).then((result)=>{
+                        
+                        question = result;
+                    })
+                    questionList.push(question);
+                }
+                quizzes[i].set('questions', questionList,{strict: false});
+
+            } 
+            //console.log(listQuestionId);
+
             HttpUtil.makeJsonResponse(res, quizzes)
         })
         .catch(err => {
@@ -35,14 +72,29 @@ QuizRouter.get('/public', (req, res)=>{
 //req: header must have id field
 QuizRouter.get('/id', (req, res)=>{
     const quizIdRequest = req.headers.id;
-    QuizModel.findOne({_id:quizIdRequest}, (err, doc)=>{
-        if (err){
+    QuizModel.findOne({_id:quizIdRequest}, async (err, quiz)=>{
+        if(err){
             return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
         }
-        if (req.user.sub != doc.user){
+        if (!quiz){
+            return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+        }
+        if (req.user.sub != quiz.user){
             return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
         }
-        return HttpUtil.makeJsonResponse(res, doc);
+        var idQuestionList = quiz.question;
+        var questionList = []
+        var j;
+
+        for (j = 0; j < idQuestionList.length; j++){
+            var question;
+            await QuestionModel.getById(idQuestionList[j]).then((result)=>{
+                question = result;
+            })
+            questionList.push(question);
+        }
+        quiz.set('questions', questionList,{strict: false});
+        return HttpUtil.makeJsonResponse(res, quiz);
     })
 })
 
@@ -58,13 +110,16 @@ QuizRouter.post('/', async (req, res)=>{
         question: questions
     }
     //createPost = req.user.sub;
-    var newQuiz = new QuizModel(createPost);
-    newQuiz.save(function (err, post){
-        if (err){ 
-            console.log(err);
-            return next(err)}
-        res.json(201, post)
-    })
+    QuizModel.createModel(createPost,req.user.sub)
+        .then(result => HttpUtil.makeJsonResponse(res, result))
+        .catch(err=>HttpUtil.makeErrorResponse(res,err))
+    // var newQuiz = new QuizModel(createPost);
+    // newQuiz.save(function (err, post){
+    //     if (err){ 
+    //         console.log(err);
+    //         return next(err)}
+    //     res.json(201, post)
+    // })
 })
 
 QuizRouter.put('/', async (req, res)=>{
@@ -96,12 +151,15 @@ QuizRouter.put('/', async (req, res)=>{
         user: req.user.sub,
         question: questions
     }
-    QuizModel.findByIdAndUpdate(quizModifyModel.id, newModelToUpdate, function (err, doc){
-        if (err){
-            return next(err);
-        }
-        res.json(201, doc);
-    })
+    QuizModel.updateModel(quizModifyModel.id,newModelToUpdate,req.user.sub)
+    .then(result => HttpUtil.makeJsonResponse(res, result))
+    .catch(err=>HttpUtil.makeErrorResponse(res,err))
+    // QuizModel.findByIdAndUpdate(quizModifyModel.id, newModelToUpdate, function (err, doc){
+    //     if (err){
+    //         return next(err);
+    //     }
+    //     res.json(201, doc);
+    // })
 })
 // delete need 
 QuizRouter.delete('/',async (req, res)=>{
@@ -122,12 +180,15 @@ QuizRouter.delete('/',async (req, res)=>{
     }
     let status = await QuestionModel.deleteListQuestions(quiz.question, req.user.sub);
     console.log(status);
-    QuizModel.findByIdAndRemove(quizDeleteModel.id, function (err, doc){
-        if (err){
-            return next(err);
-        }
-        HttpUtil.makeHttpResponse(res, doc);
-    })
+    // QuizModel.findByIdAndRemove(quizDeleteModel.id, function (err, doc){
+    //     if (err){
+    //         return next(err);
+    //     }
+    //     HttpUtil.makeHttpResponse(res, doc);
+    // })
+    var result = await QuizModel.deleteModel1(quizDeleteModel.id, req.user.sub);
+    res.json(201, result);
+    
 })
 
 export default QuizRouter;
