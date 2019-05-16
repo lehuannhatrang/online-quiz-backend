@@ -105,7 +105,7 @@ QuizRouter.post('/', async (req, res)=>{
     })
     var createPost = {
         name: req.body.name,
-        isPublic: req.body.isPublic,
+        isPublic: req.body.isPublic ? req.body.isPublic: true,
         user: req.user.sub,
         question: questions
     }
