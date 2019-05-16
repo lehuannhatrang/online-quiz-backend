@@ -1,11 +1,12 @@
 import Schema from "mongoose";
 
 export const UserInfoSchema = {
-    phones: [String],
+    phone: String,
     displayName: String,
     role: {
         type: String,
-        require: true
+        enum: ['teacher', 'student', 'admin'],
+        require: true,
     },
 
     mail: {
@@ -16,5 +17,9 @@ export const UserInfoSchema = {
     user: {
         type: Schema.ObjectId,
         ref: 'User'
+    },
+    school:{
+        type:Schema.ObjectId,
+        ref: 'School'
     }
 }

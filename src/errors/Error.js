@@ -7,6 +7,11 @@ export const Error = {
     ACCOUNT_DISABLED: 'ACCOUNT_DISABLED',
     SESSION_EXPIRED: 'SESSION_EXPIRED',
     BAD_REQUEST: 'BAD_REQUEST',
+    DUPLICATED_USER_INFO:'DUPLICATED_USER_INFO',
+    NOT_FOUND_INFO:'NOT_FOUND_INFO',
+    DUPLICATE_USERNAME: 'DUPLICATE_USERNAME',
+    NOT_FOUND_INFO:'NOT_FOUND_INFO',
+    ITEM_EXISTED: 'ITEM_EXISTED',
 }
 
 const ErrorMessage = {
@@ -45,6 +50,22 @@ const ErrorMessage = {
     BAD_REQUEST: {
         status: 400,
         message: 'Bad request',
+    },
+    DUPLICATED_USER_INFO:{
+        status:400,
+        message:'duplicated user info'
+    },
+    NOT_FOUND_INFO:{
+        status:400,
+        message:'infomation can not be found'
+    },
+    DUPLICATE_USERNAME:{
+        status:400,
+        message:'duplicate username'
+    },
+    ITEM_EXISTED:{
+        status:400,
+        message:'item is existed'
     }
 }
 

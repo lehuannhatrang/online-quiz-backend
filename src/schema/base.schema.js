@@ -46,7 +46,21 @@ function createSchema(schemaObject, versionKey, collection) {
         result = await result.exec();
         return result ? result.toObject() : null;
     }
-
+    schema.statics.getById = async function (id, populate,select) {
+        let result = this.findOne({_id: id});
+        if (populate) {
+            if (Array.isArray(populate)) {
+                populate.forEach(i => result.populate(i))
+            } else {
+                result.populate(populate);
+            }
+        }
+        if (select) {
+            result.select(select);
+        }
+        result = await result.exec();
+        return result ? result.toObject() : null;
+    }
     schema.statics.createModel = async function(model, user) {
         model.createdBy = user;
         let result = await this.create(model);
@@ -60,7 +74,19 @@ function createSchema(schemaObject, versionKey, collection) {
         UserActionModel.create(action);
         return result ? result.toObject() : null;
     }
-
+    schema.statics.createModel1 = async function(model, user) {
+        model.createdBy = user;
+        let result = await this.create(model);
+        const action = {
+            type: 'CREATE',
+            user,
+            collectionName: this.collection.name,
+            oldValue: null,
+            newValue: JSON.stringify(result)
+        }
+        UserActionModel.create(action);
+        return result ? result : null;
+    }
     schema.statics.deleteModel = async function(id, updatedAt, user) {
         const oldVersion = await this.findOne({_id: id}).exec();
         if (oldVersion) {
@@ -74,6 +100,23 @@ function createSchema(schemaObject, versionKey, collection) {
             }
             UserActionModel.create(action);
             return result ? result.toObject() : null;
+        }
+        return null;
+    }
+    schema.statics.deleteModel = function(id, user) {
+        const oldVersion = this.findOne({_id: id}).exec();
+        // console.log(oldVersion)
+        if (oldVersion) {
+            let result = this.findByIdAndDelete(id).exec();
+            const action = {
+                type: 'DELETE',
+                user,
+                collectionName: this.collection.name,
+                oldValue: JSON.stringify(oldVersion),
+                newValue: null
+            }
+            UserActionModel.create(action);
+            return result ? true : false;
         }
         return null;
     }
