@@ -116,7 +116,7 @@ QuizRouter.post('/', async (req, res)=>{
         name: req.body.name,
         isPublic: req.body.isPublic ? req.body.isPublic: true,
         shareWith: req.body.shareWith,
-        user: req.body.user,
+        user: req.user.sub,
         question: questions
     }
     //createPost = req.user.sub;
@@ -196,7 +196,7 @@ QuizRouter.delete('/',async (req, res)=>{
     //     }
     //     HttpUtil.makeHttpResponse(res, doc);
     // })
-    var result = await QuizModel.deleteModel1(quizDeleteModel.id, req.user.sub);
+    var result = await QuizModel.deleteModel(quizDeleteModel.id, req.user.sub);
     res.json(201, result);
     
 })
