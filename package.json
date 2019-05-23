@@ -8,8 +8,8 @@
     "start": "NODE_ENV=production PORT=5001 node bin/prod",
     "start:dev": "set NODE_ENV=dev && set PORT=5001 && nodemon bin/dev",
     "start:dev:onlinedb": "NODE_ENV=dev-onlinedb PORT=5001 nodemon bin/dev",
-    "start:dev:window": "set NODE_ENV=dev && set PORT=5001 && nodemon bin/dev",
-    "start:dev:window:onlinedb": "set NODE_ENV=dev-onlinedb && set PORT=5001 && nodemon bin/dev",
+    "start:dev:window": "set NODE_ENV=dev&& set PORT=5001&& nodemon bin/dev",
+    "start:dev:window:onlinedb": "set NODE_ENV=dev-onlinedb&& set PORT=5001&& nodemon bin/dev",
     "start:dev-docker": "NODE_ENV=dev-docker PORT=5001 nodemon bin/dev"
   },
   "dependencies": {
