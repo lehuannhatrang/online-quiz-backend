@@ -21,5 +21,11 @@ export const RoomSchema = {
         type:Schema.ObjectId,
         ref:"User",
         require:true 
-    }
+    },
+    userList:[
+        {
+            type: Schema.ObjectId,
+            ref: 'User'
+        }
+    ]
 }
