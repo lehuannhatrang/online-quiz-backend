@@ -27,7 +27,7 @@ QuizRouter.get('/', (req, res)=>{
                     questionList.push(question);
                 }
                 quizzes[i].set('questions', questionList,{strict: false});
-
+                delete quizzes[i].question;
             } 
             HttpUtil.makeJsonResponse(res, quizzes)
         })
@@ -39,7 +39,15 @@ QuizRouter.get('/', (req, res)=>{
 
 // Get public quiz list
 QuizRouter.get('/public', async (req, res)=>{
-    QuizModel.getByQuery({isPublic: true})
+    QuizModel.getByQuery(
+            {$or: [
+                {isPublic: true},
+                {
+                    shareWith:{$all:[req.user.sub]}
+                }
+            
+            ]}
+        )
         .then(async quizzes => {
             //var quizzes = quizzes;  
             var i;
@@ -57,7 +65,7 @@ QuizRouter.get('/public', async (req, res)=>{
                     questionList.push(question);
                 }
                 quizzes[i].set('questions', questionList,{strict: false});
-
+                delete quizzes[i].question;
             } 
             //console.log(listQuestionId);
 
@@ -94,6 +102,7 @@ QuizRouter.get('/id', (req, res)=>{
             questionList.push(question);
         }
         quiz.set('questions', questionList,{strict: false});
+        delete quiz.question;        
         return HttpUtil.makeJsonResponse(res, quiz);
     })
 })
@@ -106,7 +115,8 @@ QuizRouter.post('/', async (req, res)=>{
     var createPost = {
         name: req.body.name,
         isPublic: req.body.isPublic ? req.body.isPublic: true,
-        user: req.user.sub,
+        shareWith: req.body.shareWith,
+        user: req.body.user,
         question: questions
     }
     //createPost = req.user.sub;

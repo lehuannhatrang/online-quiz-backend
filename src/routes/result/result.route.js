@@ -5,11 +5,8 @@ import {Error} from "..//../errors/Error";
 import { runInNewContext } from 'vm';
 
 const ResultRouter = express.Router();
-var markScore = function(userAnswers, quizAnswer){
-    // Check whether the number of user-quiz's answers is matched
-    if (userAnswers.length != quizAnswer.length){
-        return HttpUtil.makeErrorResponse(res, Error.BAD_REQUEST);
-    } 
+var markScore = async function(userAnswers, quizAnswer){
+    
     var numQuestion = quizAnswer.length;
     var numIncorrect = 0;
     var i;
@@ -43,15 +40,15 @@ ResultRouter.post('/', async (req, res)=>{
             }
             quizId = res.QuizId;
         });
-        await QuizModel.findOne({_id:quizId}, (err, res)=>{
-            if (!res || err){
-                return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+        await QuizModel.findOne({_id:quizId}, (err, ress)=>{
+            if (!ress || err){
+                return HttpUtil.makeErrorResponse(ress, Error.ITEM_NOT_FOUND);
             }
-            questionIdList = res.question;
-        })
+            questionIdList = ress.question;
+        })  
+         
         
-       
-        var j;
+        var j; 
         for (j = 0; j < questionIdList.length; j++){
             await QuestionModel.findOne({_id:questionIdList[j]}, (err, res)=>{
                 quizAnswer.push(res.answer);
@@ -59,10 +56,15 @@ ResultRouter.post('/', async (req, res)=>{
         }
         
     }
+    // Check whether the number of user-quiz's answers is matched
     
+    if (userAnswers.length != quizAnswer.length){
+        return HttpUtil.makeErrorResponse(res, Error.BAD_REQUEST);
+    }  
     //Score the mark
-    let score = markScore(userAnswers, quizAnswer);
-    console.log(score);
+    let score = await markScore(userAnswers, quizAnswer);
+    console.log(score);   
+    
     userResult.score = score;
     
     //userResult.quizAnswer = quizAnswer;

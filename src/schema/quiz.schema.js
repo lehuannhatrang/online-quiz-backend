@@ -10,7 +10,12 @@ export const QuizSchema = {
         type: Boolean,
         require: true
     },
-
+    shareWith: [
+        {
+            type: Schema.ObjectId,
+            ref: 'User'
+        }
+    ],
     user: {
         type: Schema.ObjectId,
         ref: 'User'
