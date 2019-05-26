@@ -15,7 +15,7 @@ RoomRouter.get('/list', async (req, res) => {
             .then(result => {
                 room = result;
             });
-        
+        console.log(room)
         if (!(room.userList.indexOf(req.user.sub) > -1)){
             room.userList.push(req.user.sub);
         }
@@ -28,9 +28,9 @@ RoomRouter.get('/list', async (req, res) => {
             if (!quiz){
                 return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
             }
-            if (req.user.sub != quiz.user){
-                return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
-            }
+            // if (req.user.sub != quiz.user){
+            //     return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+            // }
             var idQuestionList = quiz.question;
             var questionList = []
             var j;
