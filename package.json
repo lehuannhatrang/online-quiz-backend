@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && mkdir dist && babel . -s -d ./dist --ignore node_modules",
-    "start": "NODE_ENV=production PORT=5001 node bin/prod",
+    "start": "NODE_ENV=production node bin/prod",
     "start:dev": "set NODE_ENV=dev && set PORT=5001 && nodemon bin/dev",
     "start:dev:onlinedb": "NODE_ENV=dev-onlinedb PORT=5001 nodemon bin/dev",
     "start:dev:window": "set NODE_ENV=dev&& set PORT=5001&& nodemon bin/dev",
