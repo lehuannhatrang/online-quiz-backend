@@ -22,28 +22,32 @@ RoomRouter.get('/list', async (req, res) => {
         console.log(room.userList);
         const quizIdRequest = room.QuizId;
         QuizModel.findOne({_id:quizIdRequest}, async (err, quiz)=>{
+            var questionList = []
+            
             if(err){
                 return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
             }
-            if (!quiz){
-                return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
-            }
-            if (req.user.sub != quiz.user){
-                return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
-            }
-            var idQuestionList = quiz.question;
-            var questionList = []
-            var j;
+            // if (!quiz){
+            //     return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
+            // }
+            if (quiz){
+                var idQuestionList = quiz.question;
+                var j;
 
-            for (j = 0; j < idQuestionList.length; j++){
-                var question;
-                await QuestionModel.getById(idQuestionList[j]).then((result)=>{
-                    question = result;
-                })
-                questionList.push(question);
+                for (j = 0; j < idQuestionList.length; j++){
+                    var question;
+                    await QuestionModel.getById(idQuestionList[j]).then((result)=>{
+                        question = result;
+                    })
+                    questionList.push(question);
+                }
+                quiz.set('questions', questionList,{strict: false});
+                delete quiz.question;
             }
-            quiz.set('questions', questionList,{strict: false});
-            delete quiz.question;   
+            // if (req.user.sub != quiz.user){
+            //     return HttpUtil.makeErrorResponse(res, Error.WRONG_USER);
+            // }
+               
             room.quiz = await quiz;
             delete room.userList;
             console.log(typeof(quiz));
@@ -51,7 +55,7 @@ RoomRouter.get('/list', async (req, res) => {
             //room.set('quiz', quiz, {strict:false});
             
             HttpUtil.makeJsonResponse(res, room);
-    })}
+        })}
     else{
         RoomModel.list(['quizID','Report'],'-userList')
             .then(result => {
