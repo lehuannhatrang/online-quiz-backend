@@ -8,7 +8,7 @@ export const ProdConfig = {
         }
     },
     URL_BACKEND: "https://online-quiz-ttcnpm.herokuapp.com/api",
-    URL_FRONTEND: "https://onlinequiz.com",
+    URL_FRONTEND: "https://online-quiz-client.herokuapp.com",
     BASE_NAME: '/',
     ACCESS_CONTROL_ORIGIN: '*'
 }
