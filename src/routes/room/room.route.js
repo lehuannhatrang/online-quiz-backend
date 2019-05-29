@@ -41,6 +41,7 @@ RoomRouter.get('/list', async (req, res) => {
                     await QuestionModel.getById(idQuestionList[j]).then((result)=>{
                         question = result;
                     })
+                    await delete question.answer;
                     questionList.push(question);
                 }
                 quiz.set('questions', questionList,{strict: false});
