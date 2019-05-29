@@ -11,6 +11,6 @@ export const UserSchema = {
     },
     status: {
         type: String,
-        enum: ['ACTIVATED', 'DISABLED'],
+        enum: ['ACTIVATED', 'DISABLED', 'PENDING'],
     },
 }

@@ -20,7 +20,7 @@ SignUpRoute.post('/', (req, res) => {
                     const createUser = {
                         user: req.body.username,
                         password: req.body.password,
-                        status: 'ACTIVATED',
+                        status: 'PENDING',
                     };
                     UserModel.createModel(createUser)
                         .then(user => {
