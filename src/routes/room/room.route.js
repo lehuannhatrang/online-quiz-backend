@@ -15,11 +15,9 @@ RoomRouter.get('/list', async (req, res) => {
             .then(result => {
                 room = result;
             });
-        console.log(room)
         if (!(room.userList.indexOf(req.user.sub) > -1)){
             room.userList.push(req.user.sub);
         }
-        console.log(room.userList);
         const quizIdRequest = room.QuizId;
         QuizModel.findOne({_id:quizIdRequest}, async (err, quiz)=>{
             var questionList = []
@@ -35,13 +33,16 @@ RoomRouter.get('/list', async (req, res) => {
                 var idQuestionList = quiz.question;
                 var j;
 
-
+                const currentTime = await new Date();
+                let showAnswer = await false ;
+                if( currentTime.getTime() > (room.startTime.getTime() + room.Duration*60) ) showAnswer = true;
                 for (j = 0; j < idQuestionList.length; j++){
                     var question;
                     await QuestionModel.getById(idQuestionList[j]).then((result)=>{
                         question = result;
                     })
-                    await delete question.answer;
+                    if(await !showAnswer) 
+                        delete question.answer;
                     questionList.push(question);
                 }
                 quiz.set('questions', questionList,{strict: false});
