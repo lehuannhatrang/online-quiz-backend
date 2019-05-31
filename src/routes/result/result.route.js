@@ -34,20 +34,22 @@ ResultRouter.post('/', async (req, res)=>{
     if (userResult.room != null){
         // get quiz's answers from room
         var quizId, questionIdList, answer;
-        await RoomModel.findOne({_id:userResult.room},(err, res)=>{
+        await RoomModel.findOne({_id:userResult.room}, async (err, res)=>{
             if (!res || err){
                 return HttpUtil.makeErrorResponse(res, Error.ITEM_NOT_FOUND);
             }
-            quizId = res.QuizId;
+            quizId = await res.QuizId;
         });
-        await QuizModel.findOne({_id:quizId}, (err, ress)=>{
-            if (!ress || err){
-                return HttpUtil.makeErrorResponse(ress, Error.ITEM_NOT_FOUND);
+        await console.log(quizId)
+        await QuizModel.findOne({_id:quizId}, async (err, ress)=>{
+            console.log("quizid", quizId)
+            if (err || !ress){
+                return HttpUtil.makeErrorResponse(err, Error.ITEM_NOT_FOUND);
             }
-            questionIdList = ress.question;
+            questionIdList = await ress.question;
         })  
          
-        
+        await console.log("OK");
         var j; 
         for (j = 0; j < questionIdList.length; j++){
             await QuestionModel.findOne({_id:questionIdList[j]}, (err, res)=>{
